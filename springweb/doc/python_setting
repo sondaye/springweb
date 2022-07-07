@@ -1,0 +1,13 @@
+# 파이썬 설치 및 환경설정
+1. 아나콘다 설치
+2. path 설정
+3. eclipse 환경설정
+	1) help > eclipse market place > PyDev 9.3.0 설치 > restart
+	2) window > preference > PyDev > interpreter > Python interpreter > new
+	   > 아나콘다3 폴더 내에 python.exe 선택 > Loding info에서 내역 뜰 때까지 기다리기 > Load conda 체크하고 apply > apply and close
+	3) Python 프로젝트 생성 및 실행
+		New > other > PyDev > python project
+	4) Python package 생성
+		New > PyDev package
+	5) Python module 생성
+		패키지 우클릭 > New > PyDev Module > empty > ok

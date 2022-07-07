@@ -1,0 +1,65 @@
+# mybatis
+1. 스프링에서 data base 연동하는 xml 기반 framework
+2. 기본 환경 구성
+	1) 컨테이너 설정
+		- 데이터베이스 연결 객체 선언
+		- 공통 mybatis 설정 파일 선언
+		- dao 인터페이스 폴더 선언
+	2) 공통 mybatis 설정 파일
+		- mapper 설정 파일 선언
+		- vo 등록
+		
+3. 개발 순서
+	1) sql 작성
+	2) vo 작성 (springweb.a02_mvc.a04_vo.Emp)
+	3) interface 선언 (EmpDao.java)
+		@Repository
+		public interface EmpDao {
+			public List<Emp> getEmpList(Emp sch);
+		}
+	4) 공통 mybatis xml에 vo 할당
+		<configuration>
+		1) VO 객체 alias 지정
+		<typeAliases>
+			<typeAlias alias="emp" type="springweb.a02_mvc.a04_vo.Emp"/>
+		</typeAliases>
+		2) 사용할 sql 파일 처리
+		<mappers>
+			<mapper resource="resource/mapper/EmpMapper.xml"/>
+		</mappers>
+		</configuration>
+	5) mapper.xml 선언
+		<mapper namespace="springweb.a02_mvc.a03_dao.EmpDao">
+			<select id="getEmpList" resultType="emp"
+									parameterType="emp">
+				SELECT *
+				FROM emp
+			</select>
+		</mapper>
+		
+# mybatis 데이터 처리 프로세스
+1. sql 작성
+	select ename, job, empno
+	from emp
+2. vo 만들기
+	class Emp2{
+		private String ename;
+		private String job;
+		private int empno;
+	}
+3. dao interface 선언
+	interface ExpDao{
+		public List<Emp2> emplist();
+	}
+	
+4. 공통 설정 파일 mybatis.Srping.xml
+	1) vo를 alias로 등록
+	2) mapper 등록
+5. mapper 안에 sql 처리
+	<select id="emplist" reseultType="emp2"
+		select ename, job, empno
+		from emp
+		
+사용할 sql 파일 처리
+업무별 기능 분류로 sql파일을 분리시켜서 처리
+사원정보의 리스트, 수정, 삭제, 상세화면조회는 : /EmpMapper.xml

@@ -1,0 +1,15 @@
+1. 외부 객체 생성 시, 클래스 구성요소(멤버)에 에러 발생하는 경우
+	- 클래스를 만들고 저장을 해야 실행할 수 있는 컴파일(.class)가 생성되며 외부에서 호출했을 때 오류가 발생하지 않는다.
+	
+2. Invalid property 'ca' of bean class [a01_diexp.z01_vo.CarRacer]: Bean property 'ca' is not writable or has an invalid setter method. 
+   Does the parameter type of the setter match the return type of the getter?
+   - CarRacer 에 선언한 필드명과 'ca' 가 일치하지 않아서 생기는 에러.
+     <property name="car" ref="car"/> 를 작성할 때 name을 CarRacer의 필드값과 똑같이 작성해야 함.
+     
+ 3. Error creating bean with name 'racer01' defined in class path resource
+    org.springframework.beans.factory.BeanCreationException
+    org.springframework.beans.NotWritablePropertyException
+    - CarRacer 필드에 Car 속성이 있는데 setCar/getCar 메소드가 없어서 할당을 못 해서 일어나는 오류.
+    - CarRacer 필드에 name 속성이 있는데 setName/getName 메소드가 없어서 할당을 못 해서 일어나는 오류.
+    
+4. no further connection / no lister / db 연결 안 될 때 : hostname이 올바른지 확인, 리스너가 꺼져있는지 확인

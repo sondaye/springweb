@@ -1,0 +1,38 @@
+# 개발 환경 설정
+1. 설정 내용
+	1) 고정 아이피
+		server 컴퓨터를 지정하여 고정 ip 실행 처리
+		db서버 확인
+	2) DB 서버 설정
+		- 오라클 서버 설치
+		- 방화벽 처리
+		  방화벽 설정 또는 해제
+		  시스템 검색 > 방화벽 상태 확인 > 고급 설정 > 인바운드 규칙 > 새 규칙 > 포트 > 특정 로컬 포트 > 1521 > 연결허용 > 다음 > 이름: 오라클포트 > 마침
+		  (아웃바운드 규칙도 인바운드와 동일하게 진행)
+	3) svn 서버(git 대체 가능)
+		
+	4) web 서버 설정
+	
+	
+# svn 다운로드
+이클립스 > 이클립스 마켓 플레이스 > subclipse 4.3.3
+
+# visual svn server 다운로드 (서버 담당자)
+
+# 서버의 프로젝트 가져오기
+> 자바 화면 > 임포트 > checkout from svn > 
+
+# svn
+1. commit: client -> server
+2. update: server -> client
+3. java perspective > webapp 폴더 우클릭 > team > update to head (소스파일 가져오기)
+4. jsp파일 우클릭 > team > commit (소스파일 서버에 올리기)
+5. 주의사항
+	1) commit을 하려면 현재 파일과 폴드 정보가 서버와 동일해야 함
+	2) 가능하면 각자 소스는 각자 폴더 만들어서 사용
+	3) 공통 소스 폴더는 해당 담당자만 관리할 수 있도록 할 것 - 충돌 방지
+	4) 비교를 통한 commit 상세기능 확인
+	5) 충돌 발생 시, 소스가 locked 되는 경우
+	   team > refresh/cleanup 진행 
+	6) 그래도 해결 안 될 경우 프로젝트 아예 지우기 (delete project on disk 체크)
+	

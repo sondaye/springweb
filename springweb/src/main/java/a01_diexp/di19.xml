@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+   xmlns:task="http://www.springframework.org/schema/task" 
+   xmlns:aop="http://www.springframework.org/schema/aop" 
+   xmlns:context="http://www.springframework.org/schema/context"
+   xmlns:mvc="http://www.springframework.org/schema/mvc"
+   xmlns:p="http://www.springframework.org/schema/p"
+   xmlns:c="http://www.springframework.org/schema/c"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:util="http://www.springframework.org/schema/util"
+   xmlns:websocket="http://www.springframework.org/schema/websocket"
+   xmlns:sec="http://www.springframework.org/schema/security"
+   xmlns:tx="http://www.springframework.org/schema/tx" 
+    
+   xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/task
+       http://www.springframework.org/schema/task/spring-task.xsd       
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd     
+       http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util.xsd
+       http://www.springframework.org/schema/websocket
+       http://www.springframework.org/schema/websocket/spring-websocket.xsd
+       http://www.springframework.org/schema/security
+       http://www.springframework.org/schema/security/spring-security.xsd   
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd   
+      " >
+     
+     <bean id="car" class="a01_diexp.z01_vo.Car">
+      	<constructor-arg value="F1 레이싱 포인트"/>
+      	<constructor-arg value="300km/h"/>
+      </bean>
+      <bean id="car02" class="a01_diexp.z01_vo.Car">
+      	<constructor-arg value="F1 레드불"/>
+      	<constructor-arg value="320km/h"/>
+      </bean>
+      <bean id="carRacer" class="a01_diexp.z01_vo.CarRacer" autowire="byName">
+      	<constructor-arg value="세르지오 페레스"/>
+      </bean>
+  
+ 	<!-- 
+ 	위에서 car02 만! 객체로 할당될 수 있도록 CarRacer 메서드를 변경하세요
+ 	CarRacer 에서 기능메서드의 이름을 setCar() -> setCar02() 로 변경하면 됨. 매개변수는 type만 동일하면 이름은 상관없음.
+ 	
+ 	즉, setCar(Car car) 에서 setCar02(Car car) 로만 변경하면 id=car02 객체가 할당되어 레드불이 출력된다.
+ 	--> 
+</beans>

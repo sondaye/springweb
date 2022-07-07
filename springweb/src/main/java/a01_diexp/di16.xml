@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+   xmlns:task="http://www.springframework.org/schema/task" 
+   xmlns:aop="http://www.springframework.org/schema/aop" 
+   xmlns:context="http://www.springframework.org/schema/context"
+   xmlns:mvc="http://www.springframework.org/schema/mvc"
+   xmlns:p="http://www.springframework.org/schema/p"
+   xmlns:c="http://www.springframework.org/schema/c"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:util="http://www.springframework.org/schema/util"
+   xmlns:websocket="http://www.springframework.org/schema/websocket"
+   xmlns:sec="http://www.springframework.org/schema/security"
+   xmlns:tx="http://www.springframework.org/schema/tx" 
+    
+   xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/task
+       http://www.springframework.org/schema/task/spring-task.xsd       
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd     
+       http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util.xsd
+       http://www.springframework.org/schema/websocket
+       http://www.springframework.org/schema/websocket/spring-websocket.xsd
+       http://www.springframework.org/schema/security
+       http://www.springframework.org/schema/security/spring-security.xsd   
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd   
+      " >
+     
+     <bean id="car" class="a01_diexp.z01_vo.Car">
+      	<constructor-arg value="F1 메르세데스 벤츠"/>
+      	<constructor-arg value="300km/h"/>
+      </bean>
+      <bean id="racer01" class="a01_diexp.z01_vo.CarRacer">
+      		<property name="name" value="루이스 해밀턴"/>
+      		<property name="car" ref="car"/> <!-- 속성값으로 객체를 할당할 때는 ref로 위에 선언한 객체의 id값을 적어준다. / 주의) value로 설정하는 게 아님! -->
+      </bean>
+      
+      
+      <!-- 
+      위의 내용은 아래와 같음
+      Car car = new Car("F1 메르세데스 벤츠", "300km/h")
+      Racer racer = new Racer("루이스 해밀턴")
+      racer.setCar(car); // racer의 car 객체로 car를 할당함
+      -->
+      
+      <bean id="cpu" class="a01_diexp.z01_vo.Cpu">
+      	<constructor-arg value="i5-12600KF"/>
+      	<constructor-arg value="인텔"/>
+      </bean>
+      <bean id="computer" class="a01_diexp.z01_vo.Computer">
+      		<property name="kind" value="조립식"/>
+      		<property name="cpu" ref="cpu"/> <!-- 속성값으로 객체를 할당할 때는 ref로 위에 선언한 객체의 id값을 적어준다. / 주의) value로 설정하는 게 아님!-->
+      </bean>
+ 
+</beans>

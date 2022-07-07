@@ -1,0 +1,89 @@
+# spring mvc
+1. 첫화면 로딩
+	1) controller 선언
+		springweb/a01_start/A01_StartController.java (servlet 아님! 자바 class로 생성)
+		
+	2) view 단 선언
+		springweb\src\main\webapp\WEB-INF (보안폴드)
+		하위 views 폴드 생성
+		springweb\src\main\webapp\WEB-INF\views\a01_startView.jsp
+		
+	3) container에 등록(dispatcher-servlet.xml)
+		<bean class="springweb.a01_start.A01_StartController"/>
+		추후 자동 등록처리 옵션 설정
+		
+2. 컨트롤러 선언(A01_StartController.java)
+	1) annotation 선언 @Controller
+	2) 기능 메서드 별로 url pattern 선언 및 view단 호출
+	   // http://localhost:7080/springweb/start.do
+	   @RequestMapping("/start.do")
+	   public String start(){
+	   		// 처리할 controller 내용
+	   		return "WEB-INF\\views\\a01_startView.jsp";
+	   		// view 단 호출 (forward 방식)
+	   }
+	   
+# 요청값과 모델 데이터 처리
+1. 요청값은 controller 메서드의 매개변수로 처리할 수 있다.
+	1) url: /call01.do?name=홍길동
+	   query string, form 하위 속성 name/value 잘 알고 있기: 
+	   		<form action="call01.do" method ="get/post">
+	   		<input name="name" value="홍길동">
+	   		<input name="age" value="25">
+	   		<input name="submit">
+	   		을 했을 때 url에 call.do?name=홍길동&age=25 로 표시된다
+	   		
+	   		
+	   		get 방식: 기본값으로 설정됨. url에 받은 value들이 보이고, 전송 데이터 한계가 있음
+	   		post 방식: url에 받은 value들이 보이지 않고, 전송 데이터의 한계가 없음
+	   		
+	2) @RequestMapping("/call01.do")
+	   public String call01(@RequestParam("name") String name,
+	   						@RequestParam("age" int age)){
+	   		// 요청값을 처리하되 요청값의 이름을
+	   		// String name이 아니라 ->  @RequestParameter("name") String name 형태로 선언해서 처리한다
+	   		System.out.print("이름: "+name)
+	   		System.out.print("나이: "+age)
+	   }
+
+	# 주의
+	- 요청값을 받지 못하게 처리되는 경우: 404 error
+	  get방식으로 요청값 없이 call01 메서드를 호출하면 에러 발생함
+	  /call01.do
+	  -> 요청값이 있으면 요청값을 받아서 처리하고, 없으면 default 값으로 처리해야 에러가 발생하지 않음
+		 ex) @RequestParam(value="name" defaultValue="") String name
+		     @RequestParam(value="age" defaultValue="") int age
+	- 단, default 값을 설정하더라도 숫자형 데이터를 숫자형으로 형변환될 문자열을 query string으로 선언하지 않으면 404 error
+	  // call01.do?name=홍길동&age=이십오 (x)  
+	  // 이십오를 숫자형 데이터로 형변환 할 수 없기 때문에 에러가 발생함
+	   
+2. 요청값을 객체로 매개변수 받아서 처리
+	1) url: http://localhost:7080/springweb/empList.do?ename=홍길동&job=사원
+	2) 위의 요청값을 받기 위해서는 매개변수로 설정된 클래스 안에 다음과 같은 메서드가 property로 선언되어 있어야 한다.
+		
+		class Emp{ // 클래스명과는 상관이 없음
+			public void setEname(String ename){ 
+			// setEname()  -> Ename -> ename(set property)
+			// getEname()  -> Ename -> ename (get property) ${emp.ename} 
+			// ${emp.ename} 같은 el태그에서 쓰이는 ename은 getEname을 의미함. 
+			}
+		}
+		
+		
+	3) 요청값의 key=value 에서 key가 set property와 동일하고 
+	   데이터 유형이 매개변수로 받을 수 있어 할당이 가능할 때 자동으로 객체에 할당된다.
+	   핵심) 객체의 이름이 중요한 것이 아니고, 객체가 가지고 있는 메서드가 중요함!
+	   		메서드 선언이 아래 내용처럼 되어있어야 한다.
+	   
+	   ex) job=사원 을 요청값으로 받으려고 할 때 필요한 메서드는?
+	   		public void setJob(String job) - (O)
+	   		public void setJob(int Job)    - (X) // "사원" 이라고 적힌 문자열을 int로 받을 수 없기 때문에 불가능함
+	   		public void setJob1(String job)- (X) // key 값은 Job인데 메서드는 Job01 이므로 이름이 달라서 불가능함
+	   		
+	   ex) sal=3000 을 요청값으로 받으려고 할 때 필요한 메서드는?
+	   		public void setSal(String sal) - (O) // 3000을 문자열로도 받을 수 있기 때문에 가능함
+	   		public void setSal(double sal) - (O)
+	   		pubiic void setSal(int sal)    - (O)
+	   		pubiic void setSal1(int sal)   - (X) // key 값은 Sal인데 메서드는 Sal01 이므로 이름이 달라서 불가능함
+		
+		

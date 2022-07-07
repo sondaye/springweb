@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+   xmlns:task="http://www.springframework.org/schema/task" 
+   xmlns:aop="http://www.springframework.org/schema/aop" 
+   xmlns:context="http://www.springframework.org/schema/context"
+   xmlns:mvc="http://www.springframework.org/schema/mvc"
+   xmlns:p="http://www.springframework.org/schema/p"
+   xmlns:c="http://www.springframework.org/schema/c"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:util="http://www.springframework.org/schema/util"
+   xmlns:websocket="http://www.springframework.org/schema/websocket"
+   xmlns:sec="http://www.springframework.org/schema/security"
+   xmlns:tx="http://www.springframework.org/schema/tx" 
+    
+   xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/task
+       http://www.springframework.org/schema/task/spring-task.xsd       
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd     
+       http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util.xsd
+       http://www.springframework.org/schema/websocket
+       http://www.springframework.org/schema/websocket/spring-websocket.xsd
+       http://www.springframework.org/schema/security
+       http://www.springframework.org/schema/security/spring-security.xsd   
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd   
+      " >
+ 
+      <bean id="hp" class="a01_diexp.z01_vo.HandPhone">
+      	<constructor-arg value="010-1234-5678"/>
+      	<constructor-arg value="애플"/>
+      </bean>
+      <!-- 
+      HandPhone hp = new HandPhone("010-1234-5678","애플");
+      -->
+      <bean id="hperson01" class="a01_diexp.z01_vo.HPerson">
+      		<property name="name" value="홍길동"/>
+      		<property name="handphone" ref="hp"/> <!-- 속성값으로 객체를 할당할 때는 ref로 위에 선언한 객체의 id값을 적어준다. / 주의) value로 설정하는 게 아님!-->
+      </bean>
+      <!-- 
+      HPerson 객체의 필드값: String name, HandPhone handphone;
+      HPerson hperson01 = new HPerson();
+      hperson01.setName("홍길동");
+      hperson01.setHandphone(hp); // 주의) hp와 같이 객체의 참조변수를 할당할 때는 value가 아니라 ref(참조변수의 약자) 키워드를 사용한다.
+      
+      
+      
+      
+      
+      # 컨테이너 안에서 객체와 객체를 사용하기
+      1. class 구성
+      	1) 소속될 클래스 선언
+      	2) 포함할 클래스 선언
+      		소속될 클래스를 필드로 하여 set/get 메서드 선언
+      		
+      2. 클래스를 컨테이너에서 객체로 생성
+      3. 연관 관계 설정한 property 선언하고 생성된 객체의 참조값을 할당
+      		<property name="handphone" ref="hp"/>
+      -->
+      
+     
+ 
+</beans>
