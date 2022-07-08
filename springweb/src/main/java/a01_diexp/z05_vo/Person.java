@@ -1,4 +1,4 @@
-package a01_diexp.z01_vo;
+package a01_diexp.z05_vo;
 // a01_diexp.z01_vo.Person
 
 public class Person {

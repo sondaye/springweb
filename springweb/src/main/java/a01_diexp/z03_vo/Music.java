@@ -1,4 +1,4 @@
-package a01_diexp.z01_vo;
+package a01_diexp.z03_vo;
 
 public class Music {
 	private String title;

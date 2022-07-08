@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="springweb.a02_mvc.a03_dao.DaoExp01">
+	<!-- 만들 기능 메소드 -->
+	<!-- 
+		 public double getSal();
+		 public double getSalSum();
+		 public String getJob();
+		 public boolean hasEmp(); 
+	-->
+
+	<select id="getEmpCount" resultType="int">
+		select count(*)
+		from emp
+	</select>
+	<select id="getSal" resultType="double">
+		select sal
+		from emp
+		where empno=7369
+	</select>
+	<select id="getSalSum" resultType="double">
+		select sum(sal)
+		from emp
+		where deptno=10
+	</select>
+	<select id="getJob" resultType="string">
+		select job
+		from emp
+		where empno=7499
+	</select>
+	<select id="hasEmp" resultType="boolean">
+		select count(*)
+		from emp
+		where empno=7369
+	</select>
+	<!-- 
+	public deptemp01 getDeptEmp(); 가 실행되면
+	deptemp01 과 mapping 되어있는 VO 클래스의
+		public void setDname(String dname); 
+		public void setEname(String ename); 
+		public void setSal(double sal); 
+		public void setLoc(String loc); 가 실행되면서 객체가 생성된다. (VO인 DeptEmp01에 set property 메소드들이 있어야 함!)
+	-->
+	<select id="getDeptEmp" resultType="deptemp01">
+		select dname, ename, sal, loc
+		from emp e, dept d
+		where e.deptno = d.deptno
+		and empno=7369
+	</select>
+	
+	<select id="getSalgrade" resultType="salgrade">
+		select *
+		from salgrade
+		where grade = 4
+	</select>
+	<select id="getEnames" resultType="string">
+		SELECT ename
+		FROM emp
+	</select>
+	<select id="getEmpnos" resultType="int">
+		select empno
+		from emp
+		where deptno=10
+	</select>
+	<select id="getSalaries" resultType="double">
+		select sal
+		from emp
+		where job = 'SALESMAN'
+	</select>
+	<select id="getJobs" resultType="string">
+		SELECT job
+		FROM emp
+		WHERE deptno=10
+	</select>
+</mapper>
+
+<!-- resultType 이 가능한 변수 유형
+		 int, double, string(String), boolean(0,1)  
+			cf) boolean의 경우, 데이터베이스 값이 0이면 true, 1이면 false로 출력된다 -->
+			
+			<!-- Mapped Statements collection does not contain value for springweb.a02_mvc.a03_dao.DaoExp01.hasEmp -->

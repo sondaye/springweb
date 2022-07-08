@@ -1,4 +1,4 @@
-package a01_diexp.z01_vo;
+package a01_diexp.z05_vo;
 
 public class Computer {
 	private String kind;

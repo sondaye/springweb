@@ -1,23 +1,40 @@
 # mybatis
 1. 스프링에서 data base 연동하는 xml 기반 framework
 2. 기본 환경 구성
-	1) 컨테이너 설정
+	1) 컨테이너 설정 (dispatcher-servlet.xml)
+		- 데이터베이스 연결에 필요한 공통 설정 정보 파일 선언
 		- 데이터베이스 연결 객체 선언
 		- 공통 mybatis 설정 파일 선언
+		    개발자가 sql, 입력/리턴에만 집중할 수 있도록 도와주는 역할
 		- dao 인터페이스 폴더 선언
+			지정한 인터페이스 dao를 통해서 
+			mybatis가 mapper.xml에서 실제 객체를 만들어 주므로 
+			반드시 선언해야 한다.
 	2) 공통 mybatis 설정 파일
 		- mapper 설정 파일 선언
 		- vo 등록
 		
 3. 개발 순서
-	1) sql 작성
-	2) vo 작성 (springweb.a02_mvc.a04_vo.Emp)
+	1) SQL
+	   ex) select * from dept 
+	   	   where dname like '%' || '' || '%'
+	   	   and loc like '%' || '' || '%'
+	   	   
+	   	   - * 이 return 할 내용
+	   	   - % 사이의 '' 가 매개변수
+	   	   
+	2) VO (springweb.a02_mvc.a04_vo.Emp)
+	    위의 sql에서 처리할 select 부분의 데이터,  -> return 으로 사용할 VO 객체
+	    where 조건에 입력할 데이터를 VO로 작성한다.  -> 매개변수로 사용할 VO 객체
+	   
 	3) interface 선언 (EmpDao.java)
-		@Repository
-		public interface EmpDao {
-			public List<Emp> getEmpList(Emp sch);
-		}
+		위의 SQL과 VO를 기준으로 리턴 타입과 매개변수 타입이 결정되면 메서드를 정의한다.
+			public interface DeptDao{
+				public List<Dept> getDeptList(Dept sch);
+			}
+		
 	4) 공통 mybatis xml에 vo 할당
+		리턴값과 매개변수로 사용할 패키지명과 함께하는 VO 객체를 간단한 alias로 선언
 		<configuration>
 		1) VO 객체 alias 지정
 		<typeAliases>
@@ -28,14 +45,28 @@
 			<mapper resource="resource/mapper/EmpMapper.xml"/>
 		</mappers>
 		</configuration>
+		
 	5) mapper.xml 선언
-		<mapper namespace="springweb.a02_mvc.a03_dao.EmpDao">
-			<select id="getEmpList" resultType="emp"
-									parameterType="emp">
-				SELECT *
-				FROM emp
-			</select>
-		</mapper>
+		DeptDao dao = new DeptDaoImpl();
+		위와 같은 방식은 다형성에 의해 상속 받은 실제 개체를 만들어준다.
+		이 실제 객체를 만들 때 inferface와의 연동 규칙을 정해 선언한다.
+		
+		- namespace: 인터페이스의 패키지명.인터페이스명
+		- id: 각 SQL문을 포함하고 있는 mybatis 태그의 id는 인터페이스의 메서드명과 동일하게 한다.
+			ex) id = "getDeptList"
+		- 리턴유형: resultType="dept"
+			ex) 공통 mybatis.xml에서 선언한 alias명과 동일하게 적는다.
+		- 매개변수 유형: parameterType="dept"
+			ex) 인터페이스에서 선언한 메서드의 매개변수가 Dept sch 이므로 dept라고 적는다.
+
+		- mapper.xml 코드 예시
+			<mapper namespace="springweb.a02_mvc.a03_dao.DeptDao">
+				<select id="getDeptList" resultType="dept" parameterType="dept">
+					select * from dept
+					where dname like '%'||#{dname}||'%'  -> getDname() 과 같은 의미
+					and	loc like '%'||#{loc}||'%'		 -> getLoc() 과 같은 의미
+				</select>
+			</mapper>
 		
 # mybatis 데이터 처리 프로세스
 1. sql 작성
@@ -60,6 +91,111 @@
 		select ename, job, empno
 		from emp
 		
-사용할 sql 파일 처리
-업무별 기능 분류로 sql파일을 분리시켜서 처리
-사원정보의 리스트, 수정, 삭제, 상세화면조회는 : /EmpMapper.xml
+# dao 작성 연습
+0. dao와 mapper 연동 선언하기
+	ex) 인터페이스 DaoExp01 생성,
+		DaoExp01Mapper.xml 생성
+1. 리턴 유형
+	sql의 결과에 따른 리턴 유형 선언과 여기에 맞는 mapper.xml의 선언
+	1) 단일 데이터 (변수)
+		select count(*)
+		from emp
+		// 인터페이스 메서드 선언
+		public int getEmpCount();
+		// Mapper 선언
+		<select resultType="int">
+			select count(*)
+			from emp			// 세미콜론 넣지 않도록 주의
+		</select>
+		
+	2) 단일 객체
+		- sql 생성
+			select dname, ename, sal, loc
+			from emp e, dept d
+			where e.deptno = d.deptno
+			and empno=7369;
+		- 단일 VO 생성: dname, ename, sal, loc 에 맞게
+			// class DeptEmp01
+			// private String dname	
+			// private String ename	
+			// private double sal	
+			// private String loc
+		- 공통 mybatis.Spring.xml 에 VO 등록	
+			deptemp01
+		- 인터페이스 생성
+			public deptemp01 getDeptEmp(); 새로 만들거나
+			DaoExp01 에 메서드(getDeptEmp()) 만 추가
+		- mapper 생성
+		  (mapper 생성시, 인터페이스 이름이 중요함!)
+			<select id="getDeptEmp" resultType="deptemp01">
+				select dname, ename, sal, loc
+				from emp e, dept d
+				where e.deptno = d.deptno
+				and empno=7369
+			</select>
+			
+		- 예제
+		  SELECT *
+		  FROM salgrade
+		  WHERE grade = 4
+		  를 출력해보세요.
+			
+			
+	3) 다중 리스트형 객체
+		- 하나의 열 데이터: 배열, list
+			List<String>
+			List<Integer>
+			Double[]
+		- 객체의 List 데이터
+			List<Emp>
+			List<Dept>
+			
+		- SQL
+			SELECT ename
+			FROM emp;
+			
+			SELECT empno
+			FROM emp
+			WHERE deptno=10;
+			
+			SELECT SAL 
+			FROM emp
+			WHERE job = 'SALESMAN';
+		- 인터페이스
+			public List<String> getEnames();
+			public List<Integer> getEmpnos();
+			public Double[] getSalaries();
+		- Mapper
+			<select id="getEnames" resultType="string"/>
+			<select id="getEmpnos" resultType="int"/>
+			<select id="getSalaries" resultType="double"/>
+		- service 에서 확인용 출력 (log 출력)
+			dao2.getEnames().size() dao2.getEnames().get(0)
+			dao2.getEmpnos().size() dao2.getEmpnos().get(1)
+			dao2.getSalaries().length dao2.getSalaries()[2] // 배열이라서 length
+		
+		다중열과 다중의 처리(테이블 형식의 데이터)
+		- ex) 부서번호가 30인 사원의 정보를 출력하세요
+			  1) sql
+			  		select *
+			  		from emp
+			  		where deptno=30
+			  2) vo
+			  		class Emp
+			  3) interface
+			  		public List<Emp> getEmpList30();
+			  4) mapper
+			  		<select id="getEmpList30" resultType="emp">
+			  			select *
+			  			from emp
+			  			where deptno=30
+			  	 	</select>
+			  5) service 확인
+			  		dao2.getEmpList30().size()
+			
+
+2. 매개변수 유형
+	1) 단일
+	2) 객체형
+	3) Map
+3. 리턴유형/매개변수 복합형
