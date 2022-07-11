@@ -1,7 +1,6 @@
 2022-07-08
 1. mybatis framework를 통해 데이터 베이스를 처리할려고 한다. 기본 환경 설정 구성을 예제를 통해서 기술하세요.
 	- sql 작성
-	- vo 작성
 	- interface 생성
 	- mapper 작성
 	- service 단에서 출력
@@ -57,43 +56,36 @@
       			</select>
       4) 1/4분기에 입사한 사람의 사원번호, 사원명, 분기명, 입사일
       		- sql
-      			SELECT empno, ename, to_char(hiredate,'Q') div, hiredate
+      			SELECT empno, ename, to_char(hiredate,'Q'), hiredate
 				FROM emp
-				WHERE to_char(hiredate,'Q') = '1'
-			- vo
-				private int empno;
-				private String ename;
-				private String div;          // to_char(hiredate,'Q')
-				private Date hiredate;
+				WHERE to_char(hiredate,'Q') = 4
       		- interface
-      			public List<EmpQ> getEmp14();
-      		- 공통 mybatis xml 에 vo 등록
-      			EmpQ -> empq
+      			public List<String> getEmp14();
       		- mapper.xml
-      			<select id = "getEmp14" resultType="EmpQ">
-      				SELECT empno, ename, to_char(hiredate,'Q') div, hiredate
+      			<select id = "getEmp14" resultType="string">
+      				SELECT empno, ename, to_char(hiredate,'Q'), hiredate
 					FROM emp
-					WHERE to_char(hiredate,'Q') = '1'
+					WHERE to_char(hiredate,'Q') = 4
       			</select>
       5) 직책별 평균 급여 정보(직책, 급여)
       		- sql
-      			SELECT job, round(avg(sal)) avgsal
+      			SELECT job, avg(sal)
 				FROM emp
 				GROUP BY job
 			- vo
 			<typeAliases>
-				<typeAlias alias="jobavg" type="springweb.a02_mvc.a04_vo.JobAvg"/>
+				<typeAlias alias="jobsal" type="springweb.a02_mvc.a04_vo.JobSal"/>
 			<typeAliases>
 			
-				class JobAvg{
-					private string job;
+				class JobSal{
+					private string jobname;
 					private double avgsal;
 				}
       		- interface
-      			public List<JobAvg> getJobAvg();
+      			public List<JobSal> getJobSalAvg();
       		- mapper.xml
-      			<select id = "getJobAvg" resultType="jobavg">
-      				SELECT job, round(avg(sal)) avgsal
+      			<select id = "getJobSalAvg" resultType="jobsal">
+      				SELECT job, avg(sal)
 					FROM emp
 					GROUP BY job
       			</select>
