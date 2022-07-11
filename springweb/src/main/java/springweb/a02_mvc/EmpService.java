@@ -1,14 +1,19 @@
 package springweb.a02_mvc;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import springweb.a02_mvc.a03_dao.DaoExp01;
 import springweb.a02_mvc.a03_dao.EmpDao;
+import springweb.a02_mvc.a04_vo.Dept;
 import springweb.a02_mvc.a04_vo.DeptEmp01;
 import springweb.a02_mvc.a04_vo.Emp;
+import springweb.a02_mvc.a04_vo.JobAvg;
+import springweb.a02_mvc.a04_vo.MaxSal;
 import springweb.a02_mvc.a04_vo.Salgrade;
 
 @Service
@@ -42,6 +47,57 @@ public class EmpService {
 		System.out.println(dao2.getSalaries().get(2));
 		System.out.println("직업 갯수: "+dao2.getJobs().size());
 		System.out.println(dao2.getJobs().get(0));
+		
+		// hw 0708 과제 풀이
+		System.out.println("0708 과제 4번 데이터 갯수:"+dao2.getEmp14().size());
+		System.out.println("0708 과제 5번");
+		for(JobAvg av:dao2.getJobAvg()) {
+			System.out.println(av.getJob()+"\t"+av.getAvgsal());
+		}
+		
+		// 단일 매개변수 처리
+		Emp emp = dao2.getDetail(7369);
+		if(emp!=null) {
+			System.out.println("사원명: "+emp.getEname());
+		}
+		//System.out.println("사원정보삭제");
+		//dao2.deleteEmp("사원");
+		
+		// 단일 매개변수 처리 예제
+		List<Emp> jobList = dao2.getManager("관리자");
+		System.out.println("관리자 데이터 건수: "+jobList.size());
+		// System.out.println("2/4분기 사원 삭제");
+		// dao2.deleteEmp24(2);
+		MaxSal ms = dao2.getDeptMaxSal(10);
+		System.out.println(ms.getMaxsal());
+		
+		// 객체 매개변수 처리
+		List<Emp> empschList = dao2.schEmpList02(new Emp("SMITH","CLERK",800));
+		if(empschList!=null && empschList.size()>0) {
+			System.out.println("사원정보 검색 건수: "+empschList.size());
+		}
+		System.out.println("사원정보 등록");
+		// dao2.insertEmp02(new Emp(9001,"신길동","대리));
+		System.out.println("사원정보 수정");
+		// dao2.updateEmp02(new Emp("홍길동(변경)", 5555,3333,7566));
+		System.out.println("부서정보 등록");
+		// dao2.insertDept01(new Dept(99,"기획","서울홍대"));
+		
+		// 맵 활용 매개변수 처리
+		Map<String, String> schMap = new HashMap<String, String>();
+		schMap.put("ename", "A");
+		schMap.put("job", "MAN");
+		List<Emp> emplist2 = dao2.getEmpList2(schMap);
+		System.out.println("사원정보 조회(Map 활용): "+emplist2.size());
+		
+		// 맵 활용 매개변수 처리 예제
+		Map<String, String> schDMap = new HashMap<String, String>();
+		schDMap.put("dname", "A");
+		schDMap.put("loc", "A");
+		List<Dept> deptlist2 = dao2.getDeptList2(schDMap);
+		System.out.println("부서정보 조회(Map 활용): "+deptlist2.size());
+		
+		
 		return dao.getEmpList(sch);
 	}
 	

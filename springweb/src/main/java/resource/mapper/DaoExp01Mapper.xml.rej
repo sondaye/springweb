@@ -1,0 +1,91 @@
+diff a/springweb/src/main/java/resource/mapper/DaoExp01Mapper.xml b/springweb/src/main/java/resource/mapper/DaoExp01Mapper.xml	(rejected hunks)
+@@ -73,88 +73,10 @@
+ 		FROM emp
+ 		WHERE deptno=10
+ 	</select>
+-	<select id="getEmp14" resultType="empq">
+-		SELECT empno, ename, to_char(hiredate,'Q') div, hiredate
+-		FROM emp
+-		WHERE to_char(hiredate,'Q') = '1'
+-	</select>
+-	<select id = "getJobAvg" resultType="jobavg">
+-      	SELECT job, round(avg(sal)) avgsal
+-		FROM emp
+-		GROUP BY job
+-    </select>
+-    <select id="getDetail" resultType="emp" parameterType="int">
+-				select *
+-				from emp
+-				where empno = #{empno}
+-	</select>
+-	<delete id="deleteEmp" parameterType="string">
+-				delete
+-				from emp01
+-				where job = #{job}
+-	</delete>
+-	<select id = "getManager" resultType = "emp" parameterType="string">
+-		select *
+-		from emp01
+-		where job = #{job}
+-	</select>
+-	<delete id = "deleteEmp24" parameterType="int">
+-		delete
+-		from emp01
+-		where to_char(hiredate,'Q') = #{hiredate_q}
+-	</delete>
+-	<select id = "getDeptMaxSal" resultType="maxsal" parameterType="int">
+-		SELECT deptno, max(sal) maxsal
+-		FROM emp01
+-		WHERE deptno = #{deptno}
+-		GROUP BY deptno
+-	</select>
+-	<select id="schEmpList02" resultType="emp" parameterType="emp">
+-		select *
+-		from emp01
+-		where ename = #{ename}
+-		and job = #{job}
+-		and sal = #{sal}
+-	</select>
+-	<insert id="insertEmp02" parameterType="emp">
+-		insert into emp01(empno, ename, job) values(#{empno},#{ename},#{job})
+-	</insert>
+-	<update id="updateEmp02" parameterType="emp">
+-		update emp01
+-			set ename = #{ename},
+-				mgr = #{mgr},
+-				sal = #{sal}
+-		where empno = #{empno}
+-	</update>
+-	<insert id="insertDept01" parameterType="dept">
+-		insert into dept01 values(#{deptno},#{dname},#{loc}) 
+-	</insert>
+-	<select id="getEmpList2" resultType="emp" parameterType="map">
+-		select *
+-		from emp
+-		where 1=1
+-		<if test="ename !=null">
+-		and ename like '%'||#{ename}||'%'  
+-		</if>
+-		<if test="job != null">
+-		and job like '%' || #{job} ||'%'
+-		</if>
+-	</select>
+-	<select id="getDeptList2" resultType="dept" parameterType="map">
+-		select *
+-		from dept
+-		where 1=1
+-		<if test="dname !=null">
+-		and dname like '%'||#{dname}||'%'  
+-		</if>
+-		<if test="loc != null">
+-		and loc like '%' || #{loc} ||'%'
+-		</if>
+-	</select>
+ </mapper>
+ 
+ <!-- resultType 이 가능한 변수 유형
+ 		 int, double, string(String), boolean(0,1)  
+ 			cf) boolean의 경우, 데이터베이스 값이 0이면 true, 1이면 false로 출력된다 -->
+ 			
+-
++			<!-- Mapped Statements collection does not contain value for springweb.a02_mvc.a03_dao.DaoExp01.hasEmp -->

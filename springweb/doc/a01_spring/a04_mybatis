@@ -195,7 +195,203 @@
 			
 
 2. 매개변수 유형
+    매개변수를 통해서 데이터를 처리할 때 사용된다.
+		- select문의 조건 데이터
+			select *
+			from emp
+			where ename like '%' || #{ename} || '%'
+			and job like '%' || #{job} || '%'
+		- insert문의 입력할 데이터
+			insert into dept values (#{deptno}, #{dname}, #{loc})
+		- update문의 수정 및 조건 데이터
+			update emp
+				set ename = #{ename},
+					job = #{job}
+				where empno = #{empno}
+		- delete문의 삭제한 조건 데이터
+			delete emp
+			where empno = #{empno}
+		#{ename} -> 주로 객체의 get property인 .getName()을 의미한다
+	
 	1) 단일
+		dao의 인터페이스의 단일 데이터를 매개변수로 처리하는 경우
+		- sql
+			(1)select *
+			   from emp
+			   where empno = #{empno}
+			
+			(2)delete
+			   from emp01	// 주의! emp 테이블이 아닌 복사 테이블에서 삭제할 것!
+		 	   where job = #{job}
+			
+		- interface
+			(1) public List<Emp> getDetail(int empno);
+			(2) public void deleteEmp(String job);
+		
+		- dao (springweb.a02_mvc.a03_dao.DaoExp01)
+			(1) public Emp getDetail(int empno);
+			
+		- mapper (resource\mapper\DaoExp01Mapper.xml)
+			(1) <select id="getDetail" resultType="emp" parameterType="int">
+					select *
+					from emp
+					where empno = #{empno}
+				</select>
+			(2)	<delete id="deleteEmp" parameterType="string">
+					delete
+					from emp01
+					where job = #{job}
+				</delete>
+		- service (springweb.a02_mvc.a02_service.EmpService)
+			(1) Emp emp = dao2.getDetail(7369);
+					if(emp!=null){
+						System.out.println("사원명: "+emp.getEname());
+				}
+			(2) System.out.println("# 사원정보 삭제#");
+				dao2.deleteEmp("사원");
+				
+	  // 예제
+		SELECT *
+		FROM emp01
+		WHERE job = '관리자';
+		
+		DELETE
+		FROM emp01
+		WHERE to_char(hiredate,'Q') = '2';
+		
+		- dao : public void deleteQue(String div);
+		- mapper
+			<delete id="deleteQue" parameterType="string">
+				delete
+				from emp01
+				where to_char(hiredate,'Q'_ = #{div}
+			</delete>
+		- service
+			System.out.println("1/4 분기 데이터 삭제");
+			dao2.deleteQue("1");
+		
+		
+		SELECT deptno, max(sal) maxsal
+		FROM emp01
+		WHERE deptno = 10
+		GROUP BY deptno;
+		- dao
+			public MaxSal getDeptMaxSal(int deptno);
+		- vo
+			class MaxSal{
+				private int deptno;
+				private double maxsal;
+			}
+		- 공통 mybatis.xml 에 maxsal 등록
+		- mapper
+			<select id = "getDeptMaxSal" resultType = "maxsal" parameterType="int">
+				select deptno, max(sal) maxsal
+				from emp01
+				where deptno = #{deptno}
+				group by deptno
+			</select>
+		- service
+			MaxSal MaxsalList = dao2.getDeptMaxSal(10);
+			if(MaxsalList !=null)
+				System.out.println(MaxsalList.getMaxSal());
+		
+		-- 위 관리자, '2', 10 데이터를 매개변수로 처리하는 mybatis를 만들고
+		-- service 단에 그 결과를 확인하세요
+				
 	2) 객체형
+		매개변수로 객체형을 처리하는 경우
+		- sql
+			select *
+			from emp01
+			where ename = #{ename}
+			and job = #{job}
+			and sal = #{sal}
+			insert into emp01(empno, ename, job) values(#{empno},#{ename},#{job})
+			update emp01
+				set ename = #{ename},
+					mgr = #{mgr},
+					sal = #{sal}
+				where empno = #{empno}
+				
+		- vo: 매개변수로 추가할 vo 가 필요할 때 생성
+		      생성자로 매개변수의 내용을 초기화 처리한다
+		      public Emp(String ename, String job, double sal){}
+		      public Emp(int empno, String ename, String job){}
+		      public Emp(String ename, int mgr, double sal, int empno){}
+		
+		- interface(dao)
+			public List<Emp> schEmpList02(Emp sch);
+			public void insertEmp02(Emp ins);
+			public void updateEmp02(Emp upt);
+		
+		- mapper
+			<select id="schEmpList02" resultType="emp" parameterType="emp">
+				select *
+				from emp01
+				where ename = #{ename}
+				and job = #{job}
+				and sal = #{sal}
+			</select>
+			<insert id="insertEmp02" parameterType="emp">
+				insert into emp01(empno, ename, job) values(#{empno},#{ename},#{job})
+			</insert>
+			<update id="updateEmp02" parameterType="emp">
+				update emp01
+					set ename = #{ename},
+						mgr = #{mgr},
+						sal = #{sal}
+				where empno = #{empno}
+			</update>
+			
+		- service
+			List<Emp> empschList = dao2.schEmpList02(new Emp("SMITH","CLERK",800))
+			if(empschList!=null && empschList.size()>0){
+				System.out.println("사원정보 검색 건수:"+empschList.size());
+			}
+			System.out.println("사원 정보 등록");
+			dao2.insertEmp02(new Emp(9000,"홍길동","대리"));
+			System.out.println("사원정보 수정");
+			dao2.updateEmp02(new Emp("변경홍길동",5555,3333,7566));
+			
+		// 객체 매개변수 예제
+		   insert into dept01 values(99,'기획','서울홍대')
+		
+					
 	3) Map
+		- sql
+			select *
+			from emp
+			where 1=1
+			and ename like '%'||#{ename}||'%'
+			and job like '%' || #{job} ||'%'
+		- dao
+			public List<Emp> getEmpList2(Map map);
+		- mapper: map은 string과 동일하게 mybatis에 내장되어있다.
+			<select id="getEmpList2" resultType="emp" parameterType="hashMap">
+				select *
+				from emp
+				where 1=1
+				<if test="ename !=null">			// # ename이 null일 때 처리(에러 방지)
+				and ename like '%'||#{ename}||'%'  
+				</if>
+				<if test="job != null">
+				and job like '%' || #{job} ||'%'
+				</if>
+			</select>
+		- service
+			Map<String, String> schMap = new HashMap<String, String>();
+			schMap.put("ename","A");
+			schMap.put("job","MAN");
+			List<Emp> emplist2 = dao2.getEmpList2(schMap);
+			System.out.println("사원정보조회(Map활용): "+emplist2.size());
+			
+			
+			// map 활용 예제
+		       select *
+		       from dept
+		       where 1=1
+		       and dname like '%'||#{dname}||'%'
+		       and loc like '%'||#{job}||'%'
+	
+	
 3. 리턴유형/매개변수 복합형
