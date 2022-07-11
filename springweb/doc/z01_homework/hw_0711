@@ -1,0 +1,41 @@
+2022-07-11
+[1단계:개념] 1. mybatis와 단일 매개변수와 다중매개변수를 처리하는 방식을 기술하세요.
+단일: <select id="getDetail" resultType="emp" parameterType="int"> 처럼 mapper에 인터페이스에 작성한 매개변수와 일치하게 parameterType을 입력한다.
+다중: 객체나 map을 활용해 매개변수로 사용한다.
+
+[1단계:개념] 2. map으로 매개변수 처리할 때, Map의 기본 기능과 mybatis에서 처리하는 방식을 기술하세요.
+map은 key=value로 값을 가져올 수 있다. mybatis에 기본적으로 내장되어있다.
+-mapper
+<select id="getEmpList2" resultType="emp" parameterType="hashMap">
+-service
+Map<String, String> schMap = new HashMap<String, String>();
+			schMap.put("ename","A");
+			schMap.put("job","MAN");
+			List<Emp> emplist2 = dao2.getEmpList2(schMap);
+			System.out.println("사원정보조회(Map활용): "+emplist2.size());
+[1단계:개념] 3. mybatis에서 조건절 처리에 대한 기본 형식을 기술하세요.
+<if test="ename !=null">			// # ename이 null일 때 처리(에러 방지)
+and ename like '%'||#{ename}||'%'  
+</if>
+<if test="job != null">
+and job like '%' || #{job} ||'%'
+</if>
+[1단계:확인] 4. 아래의 sql을 mybatis를 활용하여 처리하세요.
+      1) 직책을 입력하여 직책의 평균급여를 직책과 함께 데이터 가져옮
+      	SELECT round(avg(sal)) FROM emp WHERE job='SALESMAN';
+      	<select id="schJobAvg" resultType="JobAvg" parameterType="string">
+      	select round(avg(sal))
+      	from emp01
+      	where job = #{job}
+      	</select>
+      2) 급여의 범위(시작/마지막)을 지정하여 사원 정보를 가져오기
+      	<select id="schEmpList" resultType="emp" parameterType="int">
+		select *
+		from emp01
+		where sal <= #{sal1}
+		and sal >= ${sal2}
+		</select>
+      3) salgrade테이블의 정보를 입력 처리
+      	<insert id="insertSalgrade" parameterType="salgrade">
+		insert into salgrade values(#{grade},#{hisal},#{losal}) 
+		</insert>
