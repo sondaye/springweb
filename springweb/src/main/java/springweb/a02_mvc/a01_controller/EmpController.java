@@ -2,11 +2,12 @@ package springweb.a02_mvc.a01_controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import springweb.a02_mvc.EmpService;
+import springweb.a02_mvc.a02_service.EmpService;
 import springweb.a02_mvc.a04_vo.Emp;
 
 @Controller
