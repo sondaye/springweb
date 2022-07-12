@@ -78,7 +78,7 @@
 		FROM emp
 		WHERE to_char(hiredate,'Q') = '1'
 	</select>
-	<select id = "getJobAvg" resultType="jobavg">
+	<select id = "getJobAvg" resultType="jobavg" parameterType="string">
       	SELECT job, round(avg(sal)) avgsal
 		FROM emp
 		GROUP BY job

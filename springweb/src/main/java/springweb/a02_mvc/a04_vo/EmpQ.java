@@ -1,4 +1,5 @@
 package springweb.a02_mvc.a04_vo;
+// springweb.a02_mvc.a04_vo.EmpQ
 
 import java.util.Date;
 

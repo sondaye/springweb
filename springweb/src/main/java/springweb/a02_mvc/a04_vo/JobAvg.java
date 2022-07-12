@@ -1,5 +1,5 @@
 package springweb.a02_mvc.a04_vo;
-
+// springweb.a02_mvc.a04_vo.JobAvg
 public class JobAvg {
 	private String job;
 	private double avgsal;

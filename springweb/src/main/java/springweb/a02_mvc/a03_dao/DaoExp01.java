@@ -33,7 +33,7 @@ public interface DaoExp01 {
 	// hw0708 1/4 분기
 	public List<EmpQ> getEmp14();
 	// hw0708 평균 급여
-	public List<JobAvg> getJobAvg();
+	public List<JobAvg> getJobAvg(String job);
 	
 	// 단일 매개변수 처리
 	public Emp getDetail(int empno);
@@ -57,6 +57,8 @@ public interface DaoExp01 {
 	
 	// 맵 활용 매개변수 처리 예제
 	public List<Dept> getDeptList2(Map<String, String> map);
+	
+	// hw0711 과제
 
 
 
